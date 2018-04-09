@@ -1,6 +1,6 @@
-FROM haskell:7.8
+FROM haskell:7.10.2
 
-ADD . ./ghcjs
+
 
 RUN apt-get update \
     && apt-get -y install build-essential git zlib1g-dev libtinfo-dev libgmp-dev autoconf curl
@@ -11,13 +11,11 @@ RUN curl -sL https://deb.nodesource.com/setup | bash - \
 ENV PATH /root/.cabal/bin:$PATH
 
 RUN cabal update && \
-    cabal install cabal-install Cabal && \
-    echo $PATH && which cabal && cabal --version
+    cabal install --reorder-goals --max-backjumps=-1  cabal-install Cabal-1.24.2.0 && \
+    echo $PATH && which cabal && cabal --version && \
+    git clone https://github.com/ghcjs/ghcjs.git && \
+    cabal install --reorder-goals --max-backjumps=-1 --force-reinstalls  ./ghcjs
 
-RUN git clone https://github.com/ghcjs/ghcjs-prim.git && \
-    cabal install --reorder-goals --max-backjumps=-1 ./ghcjs ./ghcjs-prim
-
-RUN which ghcjs-pkg
 
 RUN ghcjs-boot --dev
 ENTRYPOINT ["ghcjs"]
