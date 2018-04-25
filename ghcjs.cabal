@@ -181,7 +181,7 @@ Executable haddock-ghcjs
                     directory,
                     filepath,
                     ghcjs,
-                    haddock-api-ghcjs >= 2.15
+                    haddock-api >= 2.15
     GHC-Options:    -Wall
 
 Executable hsc2hs-ghcjs
